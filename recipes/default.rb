@@ -207,7 +207,7 @@ end
 fstabentry = "s3fs#" + node[:aws][:s3][:bucket] + " " + node[:gitlab][:s3_mount_path] + " fuse allow_other,use_cache=/tmp 0 0"
 
 unless open('/etc/fstab').grep(/s3fs/)
-  File.open('logfile.txt', 'a+') do |f2|
+  File.open('/etc/fstab', 'a+') do |f2|
       f2.write("\n")
       f2.write(fstabentry)
     end
