@@ -31,7 +31,6 @@ default['gitlab']['gitlab_branch'] = "stable"
 case node['platform']
 when "ubuntu","debian"
   default['gitlab']['packages'] = %w{
-    ruby1.9.1 ruby1.9.1-dev ri1.9.1 libruby1.9.1
     curl wget checkinstall libxslt-dev libsqlite3-dev
     libcurl4-openssl-dev libssl-dev libmysql++-dev
     libicu-dev libc6-dev libyaml-dev nginx python python-dev

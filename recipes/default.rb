@@ -19,7 +19,7 @@
 #
 
 # Include cookbook dependencies
-%w{ ruby_build gitlab::gitolite build-essential
+%w{ gitlab::gitolite build-essential
     readline sudo openssh xml zlib python::package python::pip
     redisio::install redisio::enable }.each do |requirement|
   include_recipe requirement
