@@ -191,7 +191,7 @@ aws_secret_key=aws_key['aws_secret_access_key']
 
 passwd_s3fs_file_content="#{aws_access_key}:#{aws_secret_key}"
 unless File.exist?("/etc/passwd-s3fs") 
-  File.open('logfile.txt', 'w+') do |f1|
+  File.open('/etc/passwd-s3fs', 'w+') do |f1|
     f1.write(passwd_s3fs_file_content)
   end
 end
