@@ -195,12 +195,12 @@ aws_access_key=aws_key['aws_access_key_id']
 aws_secret_key=aws_key['aws_secret_access_key']
 
 passwd_s3fs_file_content="#{aws_access_key}:#{aws_secret_key}"
-bash "Create AWS passwd file" do
-  code <<-EOH
-    echo #{passwd_s3fs_file_contents} > /etc/passwd-s3fs
-    chmod 640 /etc/passwd-s3fs
-  EOH
+unless File.exist?("/etc/passwd-s3fs") 
+  File.open('logfile.txt', 'w+') do |f1|
+    f1.write(passwd_s3fs_file_content)
+  end
 end
+
 
 bash "mount s3fs" do
   code <<-EOH
@@ -211,14 +211,13 @@ end
 # Add mount config to fstab
 fstabentry = "s3fs#" + node[:aws][:s3][:bucket] + " " + node[:gitlab][:s3_mount_path] + " fuse allow_other,use_cache=/tmp 0 0"
 
-bash "Insert entry into fstab" do
-  code <<-EOH
-    echo #{fstabentry} >> /etc/fstab
-  EOH
-  
-  not_if "test -n `grep s3fs /etc/fstab`"
+unless open('/etc/fstab').grep(/s3fs/)
+  File.open('logfile.txt', 'a+') do |f2|
+      f2.write("\n")
+      f2.write(fstabentry)
+    end
 end
-  
+
 
 # Clone Gitlab repo from github
 git node['gitlab']['app_home'] do
