@@ -180,7 +180,7 @@ directory "#{ node[:gitlab][:s3_mount_path] }" do
   owner node['gitlab']['user']
   group node['gitlab']['group']
   mode "0755"
-  path true
+  recursive true
   action :create
 end
 
