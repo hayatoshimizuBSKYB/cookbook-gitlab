@@ -185,12 +185,6 @@ directory "#{ node[:gitlab][:s3_mount_path] }" do
 end
 
 
-mount "/export/www" do
-  device "nas1prod:/export/web_sites"
-  fstype "nfs"
-  options "rw"
-end
-
 aws_key=data_bag_item('aws', 'main')
 aws_access_key=aws_key['aws_access_key_id']
 aws_secret_key=aws_key['aws_secret_access_key']
