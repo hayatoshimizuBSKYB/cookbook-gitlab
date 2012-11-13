@@ -175,6 +175,51 @@ execute "install-gitlab-key" do
   not_if "grep -q '#{node['gitlab']['user']}' #{node['gitlab']['git_home']}/.ssh/authorized_keys"
 end
 
+# AWS S3
+directory "#{ node[:gitlab][:s3_mount_path] }" do
+  owner node['gitlab']['user']
+  group node['gitlab']['group']
+  mode "0755"
+  action :create
+end
+
+
+mount "/export/www" do
+  device "nas1prod:/export/web_sites"
+  fstype "nfs"
+  options "rw"
+end
+
+aws_key=data_bag_item('aws', 'main')
+aws_access_key=aws_key['aws_access_key_id']
+aws_secret_key=aws_key['aws_secret_access_key']
+
+passwd_s3fs_file_content="#{aws_access_key}:#{aws_secret_key}"
+bash "Create AWS passwd file" do
+  code <<-EOH
+    echo #{passwd_s3fs_file_contents} > /etc/passwd-s3fs
+    chmod 640 /etc/passwd-s3fs
+  EOH
+end
+
+bash "mount s3fs" do
+  code <<-EOH
+    s3fs #{ node[:aws][:s3][:bucket] } #{ node[:gitlab][:s3_mount_path] } -o allow_other
+  EOH
+end
+
+# Add mount config to fstab
+fstabentry = "s3fs#" + node[:aws][:s3][:bucket] + " " + node[:gitlab][:s3_mount_path] + " fuse allow_other,use_cache=/tmp 0 0"
+
+bash "Insert entry into fstab" do
+  code <<-EOH
+    echo #{fstabentry} >> /etc/fstab
+  EOH
+  
+  not_if "test -n `grep s3fs /etc/fstab`"
+end
+  
+
 # Clone Gitlab repo from github
 git node['gitlab']['app_home'] do
   repository node['gitlab']['gitlab_url']

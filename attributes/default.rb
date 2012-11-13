@@ -21,6 +21,7 @@
 default['gitlab']['user'] = "gitlab"
 default['gitlab']['group'] = "gitlab"
 default['gitlab']['home'] = "/var/gitlab"
+default['gitlab']['s3_mount_path'] = "/var/gitlab"
 default['gitlab']['app_home'] = "#{node['gitlab']['home']}/gitlab"
 
 # Set github URL for gitlab
@@ -34,6 +35,7 @@ when "ubuntu","debian"
     curl wget checkinstall libxslt-dev libsqlite3-dev
     libcurl4-openssl-dev libssl-dev libmysql++-dev
     libicu-dev libc6-dev libyaml-dev nginx python python-dev
+    cryptsetup initramfs-tools hashalot lvm2
   }
 when "redhat","centos","amazon","scientific"
   case node['platform_version'].to_i
