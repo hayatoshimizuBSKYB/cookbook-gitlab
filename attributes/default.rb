@@ -21,7 +21,7 @@
 default['gitlab']['user'] = "gitlab"
 default['gitlab']['group'] = "gitlab"
 default['gitlab']['home'] = "/var/gitlab"
-default['gitlab']['s3_mount_path'] = "/var/gitlab"
+default['gitlab']['device'] = "/dev/xvdf"
 default['gitlab']['app_home'] = "#{node['gitlab']['home']}/gitlab"
 
 # Set github URL for gitlab
