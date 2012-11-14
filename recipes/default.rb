@@ -193,6 +193,7 @@ passwd_s3fs_file_content="#{aws_access_key}:#{aws_secret_key}"
 unless File.exist?("/etc/passwd-s3fs") 
   File.open('/etc/passwd-s3fs', 'w+') do |f1|
     f1.write(passwd_s3fs_file_content)
+    f1.chmod( 0640 )
   end
 end
 
