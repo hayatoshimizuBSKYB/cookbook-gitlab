@@ -200,12 +200,12 @@ end
 
 bash "mount s3fs" do
   code <<-EOH
-    s3fs #{ node[:aws][:s3][:bucket] } #{ node[:gitlab][:s3_mount_path] } -o allow_other,url=https://s3.amazonaws.com
+    s3fs #{ node[:aws][:s3][:bucket] } #{ node[:gitlab][:s3_mount_path] } -o allow_other,url=https://s3.amazonaws.com,use_cache=/mnt
   EOH
 end
 
 # Add mount config to fstab
-fstabentry = "s3fs#" + node[:aws][:s3][:bucket] + " " + node[:gitlab][:s3_mount_path] + " fuse url=https://s3.amazonaws.com,allow_other,use_cache=/tmp 0 0"
+fstabentry = "s3fs#" + node[:aws][:s3][:bucket] + " " + node[:gitlab][:s3_mount_path] + " fuse url=https://s3.amazonaws.com,allow_other,use_cache=/mnt 0 0"
 
 unless open('/etc/fstab').grep(/s3fs/)
   File.open('/etc/fstab', 'a+') do |f2|
