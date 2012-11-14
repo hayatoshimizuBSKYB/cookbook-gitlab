@@ -18,11 +18,18 @@
 # limitations under the License.
 #
 
+require "right_aws"
+
 # Include cookbook dependencies
 %w{ gitlab::gitolite build-essential
     readline xml zlib python::package python::pip
     redisio::install redisio::enable }.each do |requirement|
   include_recipe requirement
+end
+
+
+chef_gem "right_aws" do
+  action :install
 end
 
 case node['platform_family']
