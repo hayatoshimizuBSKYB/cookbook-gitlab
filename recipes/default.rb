@@ -249,7 +249,7 @@ link "#{node['gitlab']['app_home']}/config/database.yml" do
   to "#{node['gitlab']['app_home']}/config/database.yml.sqlite"
   owner node['gitlab']['user']
   group node['gitlab']['group']
-  link_type :soft
+  link_type :symbolic
 end
 
 # Install Gems with bundle install
