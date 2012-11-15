@@ -28,10 +28,6 @@ require "right_aws"
 end
 
 
-chef_gem "right_aws" do
-  action :install
-end
-
 case node['platform_family']
 when "rhel"
   include_recipe "yumrepo::epel"
@@ -83,6 +79,15 @@ end
 python_pip "pygments" do
   action :install
 end
+
+# Create gitlab directory
+directory "#{ node[:gitlab][:app_home] }" do
+  owner node['gitlab']['user']
+  group node['gitlab']['group']
+  mode "0755"
+  action :create
+end
+
 
 # Add the gitlab user
 user node['gitlab']['user'] do
